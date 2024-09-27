@@ -1,0 +1,16 @@
+getopt_long
+memcpy -> OK
+memset -> OK
+optarg
+perror -> OK
+sigaction -> OK
+strtol
+
+flags:
+
+-d (debug)
+-m (max-hop) traceroute: max ttl must be <= 255
+-p (port) traceroute: port must be <= 65535
+-q (tries) traceroute: (between 1 and 10)
+-w (wait) default 3
+-f (first-hop)
