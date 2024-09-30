@@ -19,11 +19,12 @@
 #include "flags.h"
 #include "ft_getopt_long.h"
 #include "print.h"
+#include "utils.h"
 
 #define ERROR_MSG_TRY_HELP                                                                         \
   "Try 'ft_traceroute --help' or 'ft_traceroute --usage' for more information."
 
-static int8_t convert_arg_to_u32(const char *str, uint32_t *result);
+static int8_t convert_arg_to_i32(const char *str, int32_t *result);
 
 int8_t parse_flags(int argc, char *argv[], flags_t *flags) {
   int ft_opt;
@@ -42,7 +43,7 @@ int8_t parse_flags(int argc, char *argv[], flags_t *flags) {
   flags->port_value = DEFAULT_PORT;
   flags->tries_value = DEFAULT_TRIES;
   flags->wait_value = DEFAULT_WAIT;
-  uint32_t value;
+  int32_t value;
 
   while ((ft_opt = ft_getopt_long(argc, argv, "?huf:m:p:q:w:", long_options, &option_index)) !=
          -1) {
@@ -54,7 +55,7 @@ int8_t parse_flags(int argc, char *argv[], flags_t *flags) {
       print_usage(argv[0]);
       return 0;
     case 'f':
-      if (convert_arg_to_u32(ft_optarg, &value) < 0 || value == 0 || value > MAX_FIRST_HOP) {
+      if (convert_arg_to_i32(ft_optarg, &value) < 0 || value <= 0 || value > MAX_FIRST_HOP) {
         fprintf(stderr, "ft_traceroute: invalid value (`%s')\n", ft_optarg);
         return -1;
       }
@@ -62,7 +63,7 @@ int8_t parse_flags(int argc, char *argv[], flags_t *flags) {
       flags->options.first_hop = true;
       break;
     case 'q':
-      if (convert_arg_to_u32(ft_optarg, &value) < 0 || value == 0 || value > MAX_TRIES) {
+      if (convert_arg_to_i32(ft_optarg, &value) < 0 || value <= 0 || value > MAX_TRIES) {
         fprintf(stderr, "ft_traceroute: invalid value (`%s')\n", ft_optarg);
         return -1;
       }
@@ -71,7 +72,7 @@ int8_t parse_flags(int argc, char *argv[], flags_t *flags) {
       flags->options.tries = true;
       break;
     case 'm':
-      if (convert_arg_to_u32(ft_optarg, &value) < 0 || value == 0 || value > MAX_MAX_HOPS) {
+      if (convert_arg_to_i32(ft_optarg, &value) < 0 || value <= 0 || value > MAX_MAX_HOPS) {
         fprintf(stderr, "ft_traceroute: invalid value (`%s')\n", ft_optarg);
         return -1;
       }
@@ -79,7 +80,7 @@ int8_t parse_flags(int argc, char *argv[], flags_t *flags) {
       flags->options.max_hops = true;
       break;
     case 'p':
-      if (convert_arg_to_u32(ft_optarg, &value) < 0 || value == 0 || value > MAX_PORT) {
+      if (convert_arg_to_i32(ft_optarg, &value) < 0 || value <= 0 || value > MAX_PORT) {
         fprintf(stderr, "ft_traceroute: invalid value (`%s')\n", ft_optarg);
         return -1;
       }
@@ -87,7 +88,7 @@ int8_t parse_flags(int argc, char *argv[], flags_t *flags) {
       flags->options.port = true;
       break;
     case 'w':
-      if (convert_arg_to_u32(ft_optarg, &value) < 0 || value == 0 || value > MAX_WAIT) {
+      if (convert_arg_to_i32(ft_optarg, &value) < 0 || value <= 0 || value > MAX_WAIT) {
         fprintf(stderr, "ft_traceroute: invalid value (`%s')\n", ft_optarg);
         return -1;
       }
@@ -110,13 +111,11 @@ int8_t parse_flags(int argc, char *argv[], flags_t *flags) {
   }
 }
 
-static int8_t convert_arg_to_u32(const char *str, uint32_t *result) {
-  char *endptr;
-  long val;
+static int8_t convert_arg_to_i32(const char *str, int32_t *result) {
 
   errno = 0;
-  val = strtol(str, &endptr, 10);
-  if (endptr == str || *endptr != '\0' || val < 0) {
+  int32_t val = ft_atoi(str);
+  if (errno != 0) {
     return -1;
   }
   *result = val;

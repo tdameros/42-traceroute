@@ -1,6 +1,8 @@
-#include "ft_getopt_long.h"
 #include <stdio.h>
 #include <string.h>
+
+#include "ft_getopt_long.h"
+#include "utils.h"
 
 char *ft_optarg = NULL;
 int ft_optind = 1;
@@ -53,7 +55,7 @@ handle_long_option(int argc, char *const argv[], const struct ft_option *longopt
   char *current_arg = argv[ft_optind] + 2;
 
   for (int i = 0; longopts[i].name != NULL; i++) {
-    if (strcmp(current_arg, longopts[i].name) == 0) {
+    if (ft_strcmp(current_arg, longopts[i].name) == 0) {
       if (longopts[i].has_arg == ft_required_argument) {
         if (ft_optind + 1 < argc) {
           ft_optarg = argv[++ft_optind];
@@ -90,7 +92,7 @@ static int handle_short_option(int argc, char *const argv[], const char *optstri
   static int nextchar = 1;
   char *current_arg = argv[ft_optind];
   char opt = current_arg[nextchar++];
-  const char *opt_decl = strchr(optstring, opt);
+  const char *opt_decl = ft_strchr(optstring, opt);
 
   if (!opt_decl) {
     if (ft_opterr) {
