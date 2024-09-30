@@ -10,16 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdint.h>
 #include <stddef.h>
+#include <stdint.h>
 
 void *ft_memcpy(void *dest, const void *src, size_t n) {
   size_t index = 0;
-  uint8_t *dest_char_ptr = (uint8_t *) dest;
-  const uint8_t *src_char_ptr = (const uint8_t *) src;
+  uint8_t *dest_char_ptr = (uint8_t *)dest;
+  const uint8_t *src_char_ptr = (const uint8_t *)src;
 
-  while (index < n)
-  {
+  while (index < n) {
     dest_char_ptr[index] = src_char_ptr[index];
     index++;
   }
@@ -28,11 +27,10 @@ void *ft_memcpy(void *dest, const void *src, size_t n) {
 
 void *ft_memset(void *s, int c, size_t n) {
   size_t index = 0;
-  uint8_t *s_char_ptr = (uint8_t *) s;
+  uint8_t *s_char_ptr = (uint8_t *)s;
 
-  while (index < n)
-  {
-    s_char_ptr[index] = (uint8_t) c;
+  while (index < n) {
+    s_char_ptr[index] = (uint8_t)c;
     index++;
   }
   return (s_char_ptr);

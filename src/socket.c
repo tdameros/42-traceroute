@@ -14,8 +14,8 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <sys/time.h>
 #include <string.h>
+#include <sys/time.h>
 
 #include "socket.h"
 #include "utils.h"
@@ -56,7 +56,7 @@ int32_t resolve_udp_host(char *hostname, uint16_t port, struct sockaddr_in *addr
   }
   ft_memcpy(address, res->ai_addr, sizeof(struct sockaddr_in));
   address->sin_port = htons(33434);
-  (void) port;
+  (void)port;
   return 0;
 }
 
@@ -82,4 +82,3 @@ int32_t set_udp_socket_broadcast(int32_t socketfd, bool is_broadcast) {
   uint32_t option = is_broadcast;
   return setsockopt(socketfd, SOL_SOCKET, SO_BROADCAST, &option, sizeof(option));
 }
-

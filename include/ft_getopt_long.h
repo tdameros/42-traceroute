@@ -13,8 +13,20 @@
 #ifndef FT_GETOPT_LONG_H
 #define FT_GETOPT_LONG_H
 
-#include <getopt.h>
+#define ft_no_argument 0
+#define ft_required_argument 1
+#define ft_optional_argument 2
 
-int ft_getopt_long(int argc, char *const argv[], const char *optstring, const struct option *longopts, int *longindex);
+extern int ft_optind;
+extern char *ft_optarg;
+
+struct ft_option {
+    const char *name;
+    int has_arg;
+    int *flag;
+    int val;
+};
+
+int ft_getopt_long(int argc, char *argv[], const char *optstring, const struct ft_option *longopts, int *longindex);
 
 #endif

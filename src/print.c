@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <netdb.h>
 #include <arpa/inet.h>
+#include <netdb.h>
 #include <stdio.h>
 
 #include "flags.h"
@@ -26,7 +26,9 @@ void print_traceroute_start(const traceroute_t *traceroute) {
          DEFAULT_PACKET_SIZE);
 }
 
-void print_traceroute_result(const traceroute_result_t *result, bool is_first_try, struct sockaddr_in previous) {
+void print_traceroute_result(const traceroute_result_t *result,
+                             bool is_first_try,
+                             struct sockaddr_in previous) {
 
   if (result->status == TRACEROUTE_TIMEOUT) {
     printf(" * ");
@@ -45,7 +47,9 @@ void print_traceroute_result(const traceroute_result_t *result, bool is_first_tr
                                         0,
                                         0);
       if (result_code < 0) {
-        printf(" %s (%s)", inet_ntoa(result->reply_address.sin_addr), inet_ntoa(result->reply_address.sin_addr));
+        printf(" %s (%s)",
+               inet_ntoa(result->reply_address.sin_addr),
+               inet_ntoa(result->reply_address.sin_addr));
       } else {
         printf(" %s (%s)", host, inet_ntoa(result->reply_address.sin_addr));
       }

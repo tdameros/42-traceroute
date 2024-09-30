@@ -22,6 +22,12 @@
 #define DEFAULT_TRIES 3
 #define DEFAULT_WAIT 3
 
+#define MAX_FIRST_HOP 255
+#define MAX_MAX_HOPS 255
+#define MAX_PORT 65535
+#define MAX_TRIES 10
+#define MAX_WAIT 60
+
 typedef struct {
     char *hostname;
     uint8_t first_hop_value;

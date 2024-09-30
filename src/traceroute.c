@@ -11,16 +11,16 @@
 /* ************************************************************************** */
 
 #include <arpa/inet.h>
+#include <errno.h>
 #include <netinet/ip.h>
 #include <stdio.h>
 #include <string.h>
-#include <errno.h>
 
-#include "traceroute.h"
-#include "socket.h"
-#include "icmp.h"
-#include "time.h"
 #include "flags.h"
+#include "icmp.h"
+#include "socket.h"
+#include "time.h"
+#include "traceroute.h"
 
 static int32_t send_udp_probe(traceroute_t *traceroute);
 static traceroute_result_t receive_icmp_probe(traceroute_t *traceroute, double start_time);
@@ -105,12 +105,14 @@ static traceroute_result_t
 parse_icmp_probe(traceroute_t *traceroute, int32_t bytes_received, struct sockaddr_in reply_addr) {
   traceroute_result_t result = {0};
 
-  if (bytes_received < (int32_t)(sizeof(struct ip) + ICMP_MINLEN + sizeof(struct ip) + sizeof(in_port_t))) {
+  if (bytes_received <
+      (int32_t)(sizeof(struct ip) + ICMP_MINLEN + sizeof(struct ip) + sizeof(in_port_t))) {
     return (traceroute_result_t){.status = TRACEROUTE_ERROR};
   }
   struct icmp *receive_icmp_header = (struct icmp *)(traceroute->packet + sizeof(struct ip));
   struct ip *ip_icmp = &receive_icmp_header->icmp_ip;
-  uint8_t *udp = (uint8_t *)(traceroute->packet + sizeof(struct ip) + ICMP_MINLEN + sizeof(struct ip));
+  uint8_t *udp =
+      (uint8_t *)(traceroute->packet + sizeof(struct ip) + ICMP_MINLEN + sizeof(struct ip));
   uint16_t port = ntohs(*(uint16_t *)(udp + sizeof(in_port_t)));
 
   if (ip_icmp->ip_p != IPPROTO_UDP) {
