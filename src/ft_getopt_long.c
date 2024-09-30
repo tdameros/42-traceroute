@@ -7,16 +7,16 @@ int optind = 1;
 int opterr = 1;
 int optopt = '?';
 
-int parse_argument(int argc, char *const argv[], const char *optstring, const struct option *longopts, int *longindex);
+int parse_argument(int argc, char * argv[], const char *optstring, const struct option *longopts, int *longindex);
 int handle_long_option(int argc, char *const argv[], const struct option *longopts, int *longindex);
 int handle_short_option(int argc, char *const argv[], const char *optstring);
 
 int ft_getopt_long(int argc, char *const argv[], const char *optstring,
                 const struct option *longopts, int *longindex) {
-  return parse_argument(argc, argv, optstring, longopts, longindex);
+  return parse_argument(argc, (char **)argv, optstring, longopts, longindex);
 }
 
-int parse_argument(int argc, char *const argv[], const char *optstring, const struct option *longopts, int *longindex) {
+int parse_argument(int argc, char * argv[], const char *optstring, const struct option *longopts, int *longindex) {
   if (optind >= argc) {
     return -1;
   }
@@ -28,7 +28,12 @@ int parse_argument(int argc, char *const argv[], const char *optstring, const st
   } else if (current_arg[0] == '-' && current_arg[1] != '\0') {
     return handle_short_option(argc, argv, optstring);
   }
-  return -1;
+    char *tmp_arg = argv[optind];
+    for (int i = optind; i < argc; i++) {
+        argv[i] = argv[i + 1];
+    }
+    argv[argc - 1] = tmp_arg;
+  return parse_argument(argc - 1, argv, optstring, longopts, longindex);
 }
 
 int handle_long_option(int argc, char *const argv[], const struct option *longopts, int *longindex) {
