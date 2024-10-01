@@ -55,8 +55,8 @@ int32_t resolve_udp_host(char *hostname, uint16_t port, struct sockaddr_in *addr
     return -1;
   }
   ft_memcpy(address, res->ai_addr, sizeof(struct sockaddr_in));
-  address->sin_port = htons(33434);
-  (void)port;
+  address->sin_port = htons(port);
+  freeaddrinfo(res);
   return 0;
 }
 
