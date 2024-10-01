@@ -25,6 +25,10 @@ int main(int argc, char *argv[]) {
     printf(" %2d  ", traceroute.ttl);
     for (uint8_t i = 0; i < traceroute.max_tries; i++) {
       result = probe_traceroute(&traceroute);
+      if (result.status == TRACEROUTE_FATAL_ERROR) {
+        free_traceroute(&traceroute);
+        return 1;
+      }
       print_traceroute_result(&result, i == 0, last_result.reply_address);
       if (result.status == TRACEROUTE_TIME_EXCEEDED) {
         last_result = result;
@@ -37,5 +41,6 @@ int main(int argc, char *argv[]) {
     }
     traceroute.ttl++;
   }
+  free_traceroute(&traceroute);
   return 0;
 }

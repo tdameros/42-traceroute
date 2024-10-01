@@ -15,6 +15,7 @@
 #include <netinet/ip.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "flags.h"
 #include "icmp.h"
@@ -36,16 +37,32 @@ int8_t init_traceroute(traceroute_t *traceroute, flags_t *flags) {
   traceroute->wait_time = flags->wait_value;
   traceroute->udp_socket = create_udp_socket();
   if (traceroute->udp_socket < 0) {
+    perror("ft_traceroute: socket");
     return -1;
   }
-  set_udp_socket_broadcast(traceroute->udp_socket, true);
-  set_udp_socket_timeout(traceroute->udp_socket, 1, 0);
-  resolve_udp_host(traceroute->original_host, traceroute->port, &traceroute->destination);
+  if (set_udp_socket_timeout(traceroute->udp_socket, 1, 0) < 0) {
+    perror("ft_traceroute: setsockopt");
+    return -1;
+  }
+  if (resolve_udp_host(traceroute->original_host, traceroute->port, &traceroute->destination) < 0) {
+    fprintf(stderr, "ft_traceroute: unknow host\n");
+    return -1;
+  }
   traceroute->icmp_socket = create_icmp_socket();
-  set_icmp_socket_broadcast(traceroute->icmp_socket, true);
-  set_icmp_socket_timeout(traceroute->icmp_socket, 1, 0);
-  set_icmp_socket_debug(traceroute->icmp_socket, true);
+  if (traceroute->icmp_socket < 0) {
+    perror("ft_traceroute: socket");
+    return -1;
+  }
+  if (set_icmp_socket_timeout(traceroute->icmp_socket, 1, 0) < 0) {
+    perror("ft_traceroute: setsockopt");
+    return -1;
+  }
   return 0;
+}
+
+void free_traceroute(const traceroute_t *traceroute) {
+  close(traceroute->udp_socket);
+  close(traceroute->icmp_socket);
 }
 
 void increment_port(traceroute_t *traceroute) {

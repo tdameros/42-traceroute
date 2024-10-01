@@ -52,4 +52,5 @@ typedef struct {
 int8_t init_traceroute(traceroute_t *traceroute, flags_t *flags);
 void increment_port(traceroute_t *traceroute);
 traceroute_result_t probe_traceroute(traceroute_t *traceroute);
+void free_traceroute(const traceroute_t *traceroute);
 #endif
