@@ -20,8 +20,8 @@ static int check_overflow(const char *str, size_t index, long result, int sign);
 
 void *ft_memcpy(void *dest, const void *src, size_t n) {
   size_t index = 0;
-  uint8_t *dest_char_ptr = (uint8_t *)dest;
-  const uint8_t *src_char_ptr = (const uint8_t *)src;
+  char *dest_char_ptr = (char *)dest;
+  const char *src_char_ptr = (const char *)src;
 
   while (index < n) {
     dest_char_ptr[index] = src_char_ptr[index];
@@ -32,21 +32,21 @@ void *ft_memcpy(void *dest, const void *src, size_t n) {
 
 void *ft_memset(void *s, int c, size_t n) {
   size_t index = 0;
-  uint8_t *s_char_ptr = (uint8_t *)s;
+  char *s_char_ptr = (char *)s;
 
   while (index < n) {
-    s_char_ptr[index] = (uint8_t)c;
+    s_char_ptr[index] = (char)c;
     index++;
   }
   return (s_char_ptr);
 }
 
-char *ft_strchr(const char *s, int32_t c) {
+char *ft_strchr(const char *s, char c) {
   size_t index;
 
   index = 0;
   while (s[index] != '\0') {
-    if (s[index] == (char)c)
+    if (s[index] == c)
       return ((char *)s + index);
     index++;
   }
@@ -55,7 +55,7 @@ char *ft_strchr(const char *s, int32_t c) {
   return (NULL);
 }
 
-int32_t ft_strcmp(const char *s1, const char *s2) {
+int ft_strcmp(const char *s1, const char *s2) {
   while (*s1 != '\0' && *s2 != '\0') {
     if (*s1 != *s2)
       return (*s1 - *s2);
