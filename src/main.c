@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
         return 1;
       }
       print_traceroute_result(&result, i == 0, last_result.reply_address);
-      if (result.status == TRACEROUTE_TIME_EXCEEDED) {
+      if (result.status == TRACEROUTE_TIME_EXCEEDED || result.status == TRACEROUTE_SUCCESS) {
         last_result = result;
       }
       increment_port(&traceroute);
